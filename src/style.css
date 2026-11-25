@@ -1,0 +1,283 @@
+:root {
+	--bg: #eef3fb;
+	--bg-grad: linear-gradient(160deg, #dbe9ff 0%, #f3f6fc 60%);
+	--card: #ffffffcc;
+	--text: #14213d;
+	--muted: #5b6b86;
+	--accent: #2f6fed;
+	--border: #d5deee;
+	color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: #0e1424;
+		--bg-grad: linear-gradient(160deg, #16233f 0%, #0e1424 60%);
+		--card: #18213acc;
+		--text: #e8eefc;
+		--muted: #93a3c4;
+		--accent: #6b9bff;
+		--border: #2a3659;
+	}
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	background: var(--bg);
+	background-image: var(--bg-grad);
+	background-attachment: fixed;
+	color: var(--text);
+	font-family:
+		system-ui,
+		-apple-system,
+		"Segoe UI",
+		Roboto,
+		sans-serif;
+}
+
+.app {
+	max-width: 720px;
+	margin: 0 auto;
+	padding: 24px 16px 40px;
+}
+
+.header {
+	position: relative;
+	margin-bottom: 16px;
+}
+
+h1 {
+	margin: 0 0 12px;
+	font-size: 1.6rem;
+}
+
+h2,
+h3 {
+	margin: 0;
+}
+
+h3 {
+	margin: 24px 0 12px;
+	font-size: 1.05rem;
+	color: var(--muted);
+	font-weight: 600;
+}
+
+.search {
+	display: flex;
+	gap: 8px;
+}
+
+.search input {
+	flex: 1;
+	min-width: 0;
+	padding: 12px 14px;
+	font-size: 1rem;
+	color: var(--text);
+	background: var(--card);
+	border: 1px solid var(--border);
+	border-radius: 12px;
+	outline: none;
+}
+
+.search input:focus {
+	border-color: var(--accent);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+button {
+	padding: 12px 16px;
+	font-size: 1rem;
+	color: #fff;
+	background: var(--accent);
+	border: 0;
+	border-radius: 12px;
+	cursor: pointer;
+}
+
+button:hover {
+	filter: brightness(1.08);
+}
+
+#geo-button {
+	background: var(--card);
+	border: 1px solid var(--border);
+	padding: 12px;
+}
+
+.suggestions {
+	position: absolute;
+	z-index: 10;
+	left: 0;
+	right: 0;
+	margin: 6px 0 0;
+	padding: 6px;
+	list-style: none;
+	background: var(--bg);
+	border: 1px solid var(--border);
+	border-radius: 12px;
+	box-shadow: 0 12px 32px #0003;
+}
+
+.suggestions button {
+	width: 100%;
+	padding: 10px 12px;
+	text-align: left;
+	color: var(--text);
+	background: transparent;
+	border-radius: 8px;
+}
+
+.suggestions button:hover {
+	background: color-mix(in srgb, var(--accent) 15%, transparent);
+	filter: none;
+}
+
+.suggestions small {
+	color: var(--muted);
+}
+
+.status {
+	min-height: 1.4em;
+	margin: 0 0 8px;
+	color: var(--muted);
+}
+
+.status.error {
+	color: #d64545;
+}
+
+.card {
+	padding: 20px;
+	background: var(--card);
+	border: 1px solid var(--border);
+	border-radius: 20px;
+	backdrop-filter: blur(8px);
+}
+
+.place p {
+	margin: 4px 0 0;
+	color: var(--muted);
+}
+
+.now {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-top: 12px;
+}
+
+.icon {
+	font-size: 4rem;
+	line-height: 1;
+}
+
+.temp {
+	font-size: 3.6rem;
+	font-weight: 700;
+	line-height: 1;
+}
+
+.desc {
+	margin: 8px 0 16px;
+	font-size: 1.1rem;
+}
+
+.details {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+	gap: 12px;
+	margin: 0;
+}
+
+.details div {
+	padding: 10px 12px;
+	border: 1px solid var(--border);
+	border-radius: 12px;
+}
+
+.details dt {
+	font-size: 0.8rem;
+	color: var(--muted);
+}
+
+.details dd {
+	margin: 2px 0 0;
+	font-weight: 600;
+}
+
+.forecast {
+	display: grid;
+	gap: 8px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.forecast li {
+	display: grid;
+	grid-template-columns: 5.5rem 2rem 1fr auto;
+	align-items: center;
+	gap: 12px;
+	padding: 12px 16px;
+	background: var(--card);
+	border: 1px solid var(--border);
+	border-radius: 14px;
+}
+
+.forecast .day {
+	font-weight: 600;
+}
+
+.forecast .day small {
+	display: block;
+	font-weight: 400;
+	color: var(--muted);
+}
+
+.forecast .f-icon {
+	font-size: 1.5rem;
+}
+
+.forecast .f-desc {
+	color: var(--muted);
+	font-size: 0.9rem;
+}
+
+.forecast .range {
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.forecast .range span {
+	color: var(--muted);
+	font-weight: 400;
+}
+
+.footer {
+	margin-top: 32px;
+	text-align: center;
+	font-size: 0.85rem;
+	color: var(--muted);
+}
+
+.footer a {
+	color: var(--accent);
+}
+
+@media (max-width: 480px) {
+	.forecast li {
+		grid-template-columns: 4.5rem 1.8rem 1fr auto;
+		gap: 8px;
+		padding: 10px 12px;
+	}
+
+	.forecast .f-desc {
+		font-size: 0.8rem;
+	}
+}

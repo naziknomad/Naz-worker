@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="color-scheme" content="light dark" />
+		<title>Погода</title>
+		<link rel="stylesheet" href="/src/style.css" />
+	</head>
+	<body>
+		<main class="app">
+			<header class="header">
+				<h1>Погода</h1>
+				<form id="search-form" class="search" autocomplete="off">
+					<input
+						id="search-input"
+						type="search"
+						placeholder="Найти город…"
+						aria-label="Название города"
+						required
+					/>
+					<button type="submit">Найти</button>
+					<button type="button" id="geo-button" title="Моё местоположение" aria-label="Моё местоположение">
+						📍
+					</button>
+				</form>
+				<ul id="suggestions" class="suggestions" hidden></ul>
+			</header>
+
+			<p id="status" class="status" role="status" aria-live="polite"></p>
+
+			<section id="current" class="card current" hidden>
+				<div class="place">
+					<h2 id="place-name"></h2>
+					<p id="place-meta"></p>
+				</div>
+				<div class="now">
+					<span id="now-icon" class="icon" aria-hidden="true"></span>
+					<span id="now-temp" class="temp"></span>
+				</div>
+				<p id="now-desc" class="desc"></p>
+				<dl class="details">
+					<div>
+						<dt>Ощущается</dt>
+						<dd id="now-feels"></dd>
+					</div>
+					<div>
+						<dt>Ветер</dt>
+						<dd id="now-wind"></dd>
+					</div>
+					<div>
+						<dt>Влажность</dt>
+						<dd id="now-humidity"></dd>
+					</div>
+					<div>
+						<dt>Давление</dt>
+						<dd id="now-pressure"></dd>
+					</div>
+				</dl>
+			</section>
+
+			<section id="forecast-section" hidden>
+				<h3>Прогноз на 7 дней</h3>
+				<ul id="forecast" class="forecast"></ul>
+			</section>
+
+			<footer class="footer">
+				Данные: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>
+			</footer>
+		</main>
+		<script type="module" src="/src/main.ts"></script>
+	</body>
+</html>
