@@ -1,10 +1,4 @@
-interface Place {
-	name: string;
-	lat: number;
-	lon: number;
-	admin?: string;
-	country?: string;
-}
+import { describe, formatTemp, hpaToMmHg, placeFromHash, placeToHash, type Place } from "./lib.ts";
 
 interface GeoResult {
 	name: string;
@@ -36,37 +30,6 @@ interface Forecast {
 const DEFAULT_PLACE: Place = { name: "Алматы", lat: 43.25, lon: 76.95, country: "Казахстан" };
 const STORAGE_KEY = "weather:last-place";
 
-const WEATHER_CODES: Record<number, [string, string]> = {
-	0: ["☀️", "Ясно"],
-	1: ["🌤️", "Преимущественно ясно"],
-	2: ["⛅", "Переменная облачность"],
-	3: ["☁️", "Пасмурно"],
-	45: ["🌫️", "Туман"],
-	48: ["🌫️", "Изморозь"],
-	51: ["🌦️", "Лёгкая морось"],
-	53: ["🌦️", "Морось"],
-	55: ["🌧️", "Сильная морось"],
-	56: ["🌧️", "Ледяная морось"],
-	57: ["🌧️", "Сильная ледяная морось"],
-	61: ["🌧️", "Небольшой дождь"],
-	63: ["🌧️", "Дождь"],
-	65: ["🌧️", "Сильный дождь"],
-	66: ["🌧️", "Ледяной дождь"],
-	67: ["🌧️", "Сильный ледяной дождь"],
-	71: ["🌨️", "Небольшой снег"],
-	73: ["🌨️", "Снег"],
-	75: ["❄️", "Сильный снег"],
-	77: ["❄️", "Снежные зёрна"],
-	80: ["🌦️", "Небольшой ливень"],
-	81: ["🌧️", "Ливень"],
-	82: ["⛈️", "Сильный ливень"],
-	85: ["🌨️", "Снегопад"],
-	86: ["❄️", "Сильный снегопад"],
-	95: ["⛈️", "Гроза"],
-	96: ["⛈️", "Гроза с градом"],
-	99: ["⛈️", "Сильная гроза с градом"],
-};
-
 function $<T extends HTMLElement>(id: string): T {
 	const el = document.getElementById(id);
 	if (!el) throw new Error(`Element #${id} not found`);
@@ -89,30 +52,7 @@ function setStatus(text: string, isError = false): void {
 	statusEl.classList.toggle("error", isError);
 }
 
-function describe(code: number): [string, string] {
-	return WEATHER_CODES[code] ?? ["🌡️", "Нет данных"];
-}
-
-const round = (n: number): string => `${Math.round(n) > 0 ? "+" : ""}${Math.round(n)}°`;
-
 // ---------- Routing (hash: #/lat,lon/Name) ----------
-
-function placeToHash(p: Place): string {
-	return `#/${p.lat.toFixed(4)},${p.lon.toFixed(4)}/${encodeURIComponent(p.name)}`;
-}
-
-function placeFromHash(hash: string): Place | null {
-	const m = /^#\/(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)\/(.+)$/.exec(hash);
-	if (!m) return null;
-	const lat = Number(m[1]);
-	const lon = Number(m[2]);
-	if (Math.abs(lat) > 90 || Math.abs(lon) > 180) return null;
-	try {
-		return { lat, lon, name: decodeURIComponent(m[3]) };
-	} catch {
-		return null;
-	}
-}
 
 function loadSavedPlace(): Place | null {
 	try {
@@ -190,12 +130,12 @@ function renderCurrent(p: Place, f: Forecast): void {
 	setText("place-name", p.name);
 	setText("place-meta", [p.admin, p.country].filter(Boolean).join(", ") || f.timezone);
 	setText("now-icon", c.is_day === 0 && c.weather_code <= 1 ? "🌙" : icon);
-	setText("now-temp", round(c.temperature_2m));
+	setText("now-temp", formatTemp(c.temperature_2m));
 	setText("now-desc", desc);
-	setText("now-feels", round(c.apparent_temperature));
+	setText("now-feels", formatTemp(c.apparent_temperature));
 	setText("now-wind", `${c.wind_speed_10m.toFixed(1)} м/с`);
 	setText("now-humidity", `${c.relative_humidity_2m}%`);
-	setText("now-pressure", `${Math.round(c.pressure_msl * 0.750062)} мм рт. ст.`);
+	setText("now-pressure", `${hpaToMmHg(c.pressure_msl)} мм рт. ст.`);
 	currentEl.hidden = false;
 }
 
@@ -227,9 +167,9 @@ function renderForecast(f: Forecast): void {
 
 		const range = document.createElement("span");
 		range.className = "range";
-		range.textContent = round(f.daily.temperature_2m_max[i] ?? 0);
+		range.textContent = formatTemp(f.daily.temperature_2m_max[i] ?? 0);
 		const min = document.createElement("span");
-		min.textContent = ` / ${round(f.daily.temperature_2m_min[i] ?? 0)}`;
+		min.textContent = ` / ${formatTemp(f.daily.temperature_2m_min[i] ?? 0)}`;
 		range.append(min);
 
 		li.append(day, ic, d, range);

@@ -1,6 +1,8 @@
-import { cloudflareTest } from "@cloudflare/vitest-plugin";
 import { defineConfig } from "vite-plus";
 
+// The app is a static SPA with no Worker code, so tests run in plain Node.
 export default defineConfig({
-	plugins: [cloudflareTest({ config: true })],
+	test: {
+		include: ["src/**/*.test.ts"],
+	},
 });
