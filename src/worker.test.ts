@@ -55,6 +55,12 @@ describe("worker /api/info", () => {
 		expect(body.rates.usdKzt).toBe(500);
 	});
 
+	it("declares UTF-8 explicitly so Cyrillic opens correctly in a browser tab", async () => {
+		stubFetch();
+		const res = await worker.fetch(new Request("https://example.com/api/info"));
+		expect(res.headers.get("content-type")).toBe("application/json; charset=utf-8");
+	});
+
 	it("requests weather and both rate tables (3 upstream calls)", async () => {
 		stubFetch();
 		await worker.fetch(new Request("https://example.com/api/info"));
