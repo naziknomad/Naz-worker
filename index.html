@@ -64,13 +64,47 @@
 				</dl>
 			</section>
 
+			<section class="card rates" aria-labelledby="rates-title">
+				<div class="rates-head">
+					<h3 id="rates-title">Курс валют</h3>
+					<button type="button" id="rates-refresh" class="ghost" aria-label="Обновить курс валют">
+						↻ Обновить
+					</button>
+				</div>
+				<p id="rates-status" class="status" role="status" aria-live="polite">Загружаю…</p>
+				<dl id="rates-list" class="details" hidden>
+					<div>
+						<dt>Доллар (USD)</dt>
+						<dd id="rate-usd"></dd>
+					</div>
+					<div>
+						<dt>Евро (EUR)</dt>
+						<dd id="rate-eur"></dd>
+					</div>
+					<div>
+						<dt>Юань (CNY)</dt>
+						<dd id="rate-cny"></dd>
+					</div>
+					<div>
+						<dt>EUR / USD</dt>
+						<dd id="rate-eurusd"></dd>
+					</div>
+				</dl>
+				<p id="rates-note" class="note" hidden>
+					Курсы к тенге (₸). EUR / USD считается через тенге.
+				</p>
+			</section>
+
 			<section id="forecast-section" hidden>
 				<h3>Прогноз на 7 дней</h3>
 				<ul id="forecast" class="forecast"></ul>
 			</section>
 
 			<footer class="footer">
-				Данные: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>
+				Данные: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>,
+				<a href="https://www.exchangerate-api.com" target="_blank" rel="noopener"
+					>ExchangeRate-API</a
+				>
 			</footer>
 		</main>
 		<script type="module" src="/src/main.ts"></script>

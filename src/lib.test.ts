@@ -2,6 +2,7 @@ import { describe as suite, expect, it } from "vite-plus/test";
 import {
 	WEATHER_CODES,
 	describe,
+	formatRate,
 	formatTemp,
 	hpaToMmHg,
 	placeFromHash,
@@ -39,6 +40,14 @@ suite("formatTemp", () => {
 		expect(formatTemp(0)).toBe("0°");
 		expect(formatTemp(-0.4)).toBe("0°");
 		expect(formatTemp(0.4)).toBe("0°");
+	});
+});
+
+suite("formatRate", () => {
+	it("uses a decimal comma and fixed digits", () => {
+		expect(formatRate(460.04)).toBe("460,04");
+		expect(formatRate(500)).toBe("500,00");
+		expect(formatRate(1.0959, 4)).toBe("1,0959");
 	});
 });
 

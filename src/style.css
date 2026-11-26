@@ -276,3 +276,46 @@ button:hover {
 		font-size: 0.8rem;
 	}
 }
+
+.rates {
+	margin-top: 16px;
+}
+
+.rates-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 8px;
+}
+
+.rates-head h3 {
+	margin: 0;
+}
+
+.rates .status {
+	margin: 0;
+}
+
+.rates .details {
+	margin-top: 12px;
+}
+
+.rates .note {
+	margin: 12px 0 0;
+	font-size: 0.85rem;
+	color: var(--muted);
+}
+
+button.ghost {
+	padding: 6px 12px;
+	font-size: 0.9rem;
+	color: var(--accent);
+	background: transparent;
+	border: 1px solid var(--border);
+}
+
+button.ghost:disabled {
+	opacity: 0.6;
+	cursor: progress;
+}

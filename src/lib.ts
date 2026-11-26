@@ -53,6 +53,14 @@ export function hpaToMmHg(hpa: number): number {
 	return Math.round(hpa * 0.750062);
 }
 
+/** Курс с фиксированным числом знаков и запятой, как принято в русской локали: 460,04 */
+export function formatRate(n: number, digits = 2): string {
+	return new Intl.NumberFormat("ru-RU", {
+		minimumFractionDigits: digits,
+		maximumFractionDigits: digits,
+	}).format(n);
+}
+
 export function placeToHash(p: Place): string {
 	return `#/${p.lat.toFixed(4)},${p.lon.toFixed(4)}/${encodeURIComponent(p.name)}`;
 }

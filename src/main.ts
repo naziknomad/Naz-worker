@@ -1,4 +1,12 @@
-import { describe, formatTemp, hpaToMmHg, placeFromHash, placeToHash, type Place } from "./lib.ts";
+import {
+	describe,
+	formatRate,
+	formatTemp,
+	hpaToMmHg,
+	placeFromHash,
+	placeToHash,
+	type Place,
+} from "./lib.ts";
 
 interface GeoResult {
 	name: string;
@@ -180,7 +188,7 @@ function renderForecast(f: Forecast): void {
 
 async function render(p: Place): Promise<void> {
 	const id = ++requestId;
-	setStatus("Загрузка…");
+	setStatus("Загружаю…");
 	document.title = `Погода — ${p.name}`;
 	try {
 		const f = await fetchForecast(p);
@@ -273,6 +281,50 @@ geoButton.addEventListener("click", () => {
 	);
 });
 
+// ---------- Exchange rates (from our own Worker: /api/info) ----------
+
+interface RatesInfo {
+	rates: { usdKzt: number; eurKzt: number; cnyKzt: number; eurUsd: number };
+}
+
+const ratesStatus = $("rates-status");
+const ratesList = $("rates-list");
+const ratesNote = $("rates-note");
+const ratesRefresh = $<HTMLButtonElement>("rates-refresh");
+
+function setRatesStatus(text: string, isError = false): void {
+	ratesStatus.textContent = text;
+	ratesStatus.hidden = text === "";
+	ratesStatus.classList.toggle("error", isError);
+}
+
+async function loadRates(): Promise<void> {
+	ratesRefresh.disabled = true;
+	ratesList.hidden = true;
+	ratesNote.hidden = true;
+	setRatesStatus("Загружаю…");
+	try {
+		const info = await fetchJson<RatesInfo>("/api/info");
+		const r = info.rates;
+		setText("rate-usd", `${formatRate(r.usdKzt)} ₸`);
+		setText("rate-eur", `${formatRate(r.eurKzt)} ₸`);
+		setText("rate-cny", `${formatRate(r.cnyKzt)} ₸`);
+		setText("rate-eurusd", formatRate(r.eurUsd, 4));
+		ratesList.hidden = false;
+		ratesNote.hidden = false;
+		setRatesStatus("");
+	} catch {
+		setRatesStatus(
+			"Не удалось загрузить курс валют. Проверьте соединение и нажмите «Обновить».",
+			true,
+		);
+	} finally {
+		ratesRefresh.disabled = false;
+	}
+}
+
+ratesRefresh.addEventListener("click", () => void loadRates());
+
 // ---------- Boot ----------
 
 window.addEventListener("hashchange", () => {
@@ -286,3 +338,5 @@ if (placeFromHash(location.hash)) {
 } else {
 	navigate(initial);
 }
+
+void loadRates();
