@@ -12,5 +12,20 @@ export default defineConfig({
 			// Only /api/* goes to the Worker; everything else is served as static assets
 			runWorkerFirst: ["/api/*"],
 		},
+		// Логи запросов и ошибок: Cloudflare → Workers & Pages → naz-worker → Observability
+		observability: {
+			logs: {
+				enabled: true,
+				headSamplingRate: 1, // сохранять 100% запросов
+				invocationLogs: true,
+				persist: true,
+			},
+			traces: {
+				enabled: false,
+				headSamplingRate: 1,
+				persist: true,
+			},
+			issues: { enabled: false },
+		},
 	},
 });
